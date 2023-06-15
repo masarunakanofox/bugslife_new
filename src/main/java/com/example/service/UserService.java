@@ -3,6 +3,8 @@ package com.example.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.form.UserSearchForm;
@@ -17,9 +19,14 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 @Service
 @Transactional(readOnly = true)
 public class UserService {
+	// No.1追記箇所
+	PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
 
 	@PersistenceContext
 	private EntityManager entityManager;
@@ -36,6 +43,25 @@ public class UserService {
 
 	public Optional<User> findOne(Long id) {
 		return userRepository.findById(id);
+	}
+
+	// /**
+	// * ユーザー情報を保存する
+	// */
+	// @Transactional(readOnly = false)
+	// public User save(User entity) {
+	// /**
+	// * パスワードをjavaの暗号化方式を付与する
+	// */
+	// entity.setPassword("{noop}" + entity.getPassword());
+	// return userRepository.save(entity);
+	// }
+
+	@Transactional(readOnly = false)
+	public User save(User entity) {
+		String encodedPassword = passwordEncoder.encode(entity.getPassword());
+		entity.setPassword(encodedPassword);
+		return userRepository.save(entity);
 	}
 
 	@Transactional(readOnly = false)
