@@ -19,14 +19,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
-import org.springframework.security.crypto.password.PasswordEncoder;
-
 @Service
 @Transactional(readOnly = true)
 public class UserService {
-	// No.1追記箇所
-	PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
 
 	@PersistenceContext
 	private EntityManager entityManager;
@@ -36,6 +31,9 @@ public class UserService {
 
 	@Autowired
 	private DeletedUserRepository deletedUserRepository;
+
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	public List<User> findAll() {
 		return userRepository.findAll();
@@ -56,7 +54,6 @@ public class UserService {
 	// entity.setPassword("{noop}" + entity.getPassword());
 	// return userRepository.save(entity);
 	// }
-
 	@Transactional(readOnly = false)
 	public User save(User entity) {
 		String encodedPassword = passwordEncoder.encode(entity.getPassword());
@@ -106,5 +103,15 @@ public class UserService {
 		Stream<String> userRole = authentication.getAuthorities().stream()
 				.map(GrantedAuthority::getAuthority);
 		return userRole.anyMatch(role -> role.equals("ROLE_ADMIN"));
+	}
+
+	// 認証追記
+	public boolean authenticate(String email, String password) {
+		Optional<User> user = userRepository.findByEmail(email);
+		if (!user.isPresent()) {
+			return false; // ユーザーが存在しない場合は認証失敗
+		}
+		String storedEncodedPassword = user.get().getPassword();
+		return passwordEncoder.matches(password, storedEncodedPassword);
 	}
 }
