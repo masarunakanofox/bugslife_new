@@ -19,8 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -37,7 +35,8 @@ import jakarta.servlet.http.HttpServletRequest;
 @RequestMapping("/api/authenticate")
 public class AuthenticateController {
 
-	private PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();// 追記箇所
+	// private PasswordEncoder passwordEncoder =
+	// PasswordEncoderFactories.createDelegatingPasswordEncoder();// 追記箇所
 
 	@Value("${jwt.secret}")
 	private String secretKey;
@@ -59,19 +58,20 @@ public class AuthenticateController {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User not found");
 		}
 		// Userが存在する場合はパスワードを比較
-		// PasswordEncoder passwordEncoder =
-		// PasswordEncoderFactories.createDelegatingPasswordEncoder();
-		// if (!passwordEncoder.matches(requestBody.getPassword(),
-		// user.get().getPassword())) {
+		PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+		System.out.println(passwordEncoder);
+		if (!passwordEncoder.matches(requestBody.getPassword(),
+				user.get().getPassword())) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Password is not correct");
+		}
+
+		// String storedEncodedPassword = user.get().getPassword();
+		// boolean isPasswordMatch = passwordEncoder.matches(requestBody.getPassword(),
+		// storedEncodedPassword);
+		// if (!isPasswordMatch) {
 		// throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Password is not
 		// correct");
 		// }
-
-		String storedEncodedPassword = user.get().getPassword();
-		boolean isPasswordMatch = passwordEncoder.matches(requestBody.getPassword(), storedEncodedPassword);
-		if (!isPasswordMatch) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Password is not correct");
-		}
 		// パスワードが一致する場合はJWTを生成して返す
 		return new Authenticate.Response(generateToken(user.get()));
 	}

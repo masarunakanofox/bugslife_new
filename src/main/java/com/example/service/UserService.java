@@ -3,9 +3,10 @@ package com.example.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 import com.example.form.UserSearchForm;
 import com.example.model.DeletedUser;
@@ -32,8 +33,12 @@ public class UserService {
 	@Autowired
 	private DeletedUserRepository deletedUserRepository;
 
-	@Autowired
-	private PasswordEncoder passwordEncoder;
+	private final PasswordEncoder passwordEncoder;
+
+	@Autowired // コンストラクタインジェクションを追加
+	public UserService(PasswordEncoder passwordEncoder) {
+		this.passwordEncoder = passwordEncoder;
+	}
 
 	public List<User> findAll() {
 		return userRepository.findAll();
@@ -105,13 +110,13 @@ public class UserService {
 		return userRole.anyMatch(role -> role.equals("ROLE_ADMIN"));
 	}
 
-	// 認証追記
-	public boolean authenticate(String email, String password) {
-		Optional<User> user = userRepository.findByEmail(email);
-		if (!user.isPresent()) {
-			return false; // ユーザーが存在しない場合は認証失敗
-		}
-		String storedEncodedPassword = user.get().getPassword();
-		return passwordEncoder.matches(password, storedEncodedPassword);
-	}
+	// // 認証追記
+	// public boolean authenticate(String email, String password) {
+	// Optional<User> user = userRepository.findByEmail(email);
+	// if (!user.isPresent()) {
+	// return false; // ユーザーが存在しない場合は認証失敗
+	// }
+	// String storedEncodedPassword = user.get().getPassword();
+	// return passwordEncoder.matches(password, storedEncodedPassword);
+	// }
 }
