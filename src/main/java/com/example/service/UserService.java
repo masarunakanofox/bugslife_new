@@ -3,7 +3,10 @@ package com.example.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 import com.example.form.UserSearchForm;
 import com.example.model.DeletedUser;
@@ -30,12 +33,37 @@ public class UserService {
 	@Autowired
 	private DeletedUserRepository deletedUserRepository;
 
+	private final PasswordEncoder passwordEncoder;
+
+	@Autowired // コンストラクタインジェクションを追加
+	public UserService(PasswordEncoder passwordEncoder) {
+		this.passwordEncoder = passwordEncoder;
+	}
+
 	public List<User> findAll() {
 		return userRepository.findAll();
 	}
 
 	public Optional<User> findOne(Long id) {
 		return userRepository.findById(id);
+	}
+
+	// /**
+	// * ユーザー情報を保存する
+	// */
+	// @Transactional(readOnly = false)
+	// public User save(User entity) {
+	// /**
+	// * パスワードをjavaの暗号化方式を付与する
+	// */
+	// entity.setPassword("{noop}" + entity.getPassword());
+	// return userRepository.save(entity);
+	// }
+	@Transactional(readOnly = false)
+	public User save(User entity) {
+		String encodedPassword = passwordEncoder.encode(entity.getPassword());
+		entity.setPassword(encodedPassword);
+		return userRepository.save(entity);
 	}
 
 	@Transactional(readOnly = false)
@@ -81,4 +109,14 @@ public class UserService {
 				.map(GrantedAuthority::getAuthority);
 		return userRole.anyMatch(role -> role.equals("ROLE_ADMIN"));
 	}
+
+	// // 認証追記
+	// public boolean authenticate(String email, String password) {
+	// Optional<User> user = userRepository.findByEmail(email);
+	// if (!user.isPresent()) {
+	// return false; // ユーザーが存在しない場合は認証失敗
+	// }
+	// String storedEncodedPassword = user.get().getPassword();
+	// return passwordEncoder.matches(password, storedEncodedPassword);
+	// }
 }
