@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
+import jakarta.persistence.Query;
 
 import com.example.form.UserSearchForm;
 import com.example.model.DeletedUser;
@@ -61,13 +62,17 @@ public class UserService {
 	@SuppressWarnings("unchecked")
 	public List<User> search(UserSearchForm form, boolean isAdmin) {
 		String role = isAdmin ? "ADMIN" : "USER";
-		if (form.getName() != null && form.getName() != "") {
-			String sql = "SELECT * FROM users WHERE name = '" + form.getName() + "'";
+		if (form.getName() != null && !form.getName().isEmpty()) {
+			String sql = "SELECT * FROM users WHERE name = :name";
 			if (!isAdmin) {
-				sql += " AND role = '" + role + "'";
+				sql += " AND role = :role";
 			}
-			return entityManager.createNativeQuery(sql, User.class)
-					.getResultList();
+			Query query = entityManager.createNativeQuery(sql, User.class);
+			query.setParameter("name", form.getName());
+			if (!isAdmin) {
+				query.setParameter("role", role);
+			}
+			return query.getResultList();
 		}
 		if (!isAdmin) {
 			return userRepository.findByRole(role);
@@ -81,4 +86,5 @@ public class UserService {
 				.map(GrantedAuthority::getAuthority);
 		return userRole.anyMatch(role -> role.equals("ROLE_ADMIN"));
 	}
+
 }
