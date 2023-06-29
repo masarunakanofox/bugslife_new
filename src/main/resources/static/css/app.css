@@ -9,8 +9,8 @@
 
 /* 詳細 */
 span.font-impact {
-  font-family: "Impact";
-  font-size: small;
+  word-break: break-all;
+  font-size: 20px;
 }
 
 a.btn {
@@ -27,37 +27,58 @@ a.btn-link {
   height: 36px;
 }
 
+.btn-warning {
+  background-color: #0d6efd;
+}
+
+.btn-info {
+  background-color: #dc3545;
+}
+
+.btn-light {
+  background-color: #6c757d;
+}
+
+.btn {
+  color: white;
+}
+
 /* PC */
 .app-show-container {
   width: 100%;
 }
 
 /* タブレット */
-@media (max-width: 768px) { 
+@media (max-width: 768px) {
+
   /* 一覧 */
   .for-tablet {
     display: none;
   }
+
   .app-show-container {
     width: 1500px;
     height: 3000px;
   }
+
   span.font-impact {
-    font-size: x-large;
+    font-size: smaller;
   }
 }
 
 /* スマホ */
 @media (max-device-width: 500px) {
+
   /* 一覧 */
   .for-pc.for-tablet {
     display: none;
   }
-  
+
   .app-show-container {
     width: 1500px;
   }
+
   span.font-impact {
-    font-size: xx-large;
+    font-size: smaller;
   }
 }
