@@ -4,13 +4,15 @@
 }
 
 .text-overflow {
+  text-overflow: ellipsis;
+  overflow: hidden;
   white-space: nowrap;
 }
 
 /* 詳細 */
 span.font-impact {
   word-break: break-all;
-  font-size: 20px;
+  font-size: 16px;
 }
 
 a.btn {
@@ -29,14 +31,17 @@ a.btn-link {
 
 .btn-warning {
   background-color: #0d6efd;
+  border-color: white;
 }
 
 .btn-info {
   background-color: #dc3545;
+  border-color: white;
 }
 
 .btn-light {
   background-color: #6c757d;
+  border-color: white;
 }
 
 .btn {
