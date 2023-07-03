@@ -4,13 +4,15 @@
 }
 
 .text-overflow {
+  text-overflow: ellipsis;
+  overflow: hidden;
   white-space: nowrap;
 }
 
 /* 詳細 */
 span.font-impact {
-  font-family: "Impact";
-  font-size: small;
+  word-break: break-all;
+  font-size: 16px;
 }
 
 a.btn {
@@ -27,37 +29,61 @@ a.btn-link {
   height: 36px;
 }
 
+.btn-warning {
+  background-color: #0d6efd;
+  border-color: white;
+}
+
+.btn-info {
+  background-color: #dc3545;
+  border-color: white;
+}
+
+.btn-light {
+  background-color: #6c757d;
+  border-color: white;
+}
+
+.btn {
+  color: white;
+}
+
 /* PC */
 .app-show-container {
   width: 100%;
 }
 
 /* タブレット */
-@media (max-width: 768px) { 
+@media (max-width: 768px) {
+
   /* 一覧 */
   .for-tablet {
     display: none;
   }
+
   .app-show-container {
     width: 1500px;
     height: 3000px;
   }
+
   span.font-impact {
-    font-size: x-large;
+    font-size: smaller;
   }
 }
 
 /* スマホ */
 @media (max-device-width: 500px) {
+
   /* 一覧 */
   .for-pc.for-tablet {
     display: none;
   }
-  
+
   .app-show-container {
     width: 1500px;
   }
+
   span.font-impact {
-    font-size: xx-large;
+    font-size: smaller;
   }
 }
