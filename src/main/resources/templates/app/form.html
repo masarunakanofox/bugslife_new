@@ -52,12 +52,18 @@
         const reader = new FileReader();
         reader.addEventListener('load', function () {
           image.value = reader.result;
+
+          const existingPreview = document.getElementById('image_preview');
+          if (existingPreview) {
+          existingPreview.remove();
+          }
+
           const imagePreview = document.createElement('img');
           imagePreview.id = 'image_preview';
           imagePreview.src = reader.result;
           imagePreview.style = "max-width: 200px; max-height: 200px;"
 
-          imageFile.after(imagePreview);
+          imageFile.parentNode.insertBefore(imagePreview, imageFile.nextSibling);
         });
         reader.readAsDataURL(file);
       });
