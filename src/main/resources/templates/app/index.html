@@ -47,6 +47,10 @@
               th:href="@{/apps/{id}/edit(id = ${app.id})}"
             >Edit</a
             >
+            <form th:action="@{/apps/{id}(id=${app.id})}" method="post">
+              <input type="hidden" name="_method" value="delete">
+              <button type="submit" class="btn btn-third">Destroy</button>
+            </form>
           </td>
           <td th:text="${app.active}"></td>
         </tr>
