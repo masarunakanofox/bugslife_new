@@ -48,6 +48,19 @@ a.btn-link {
   color: white;
 }
 
+.btn-primary{
+  background-color: #0d6efd;
+}
+
+.btn-secondary{
+  background-color: #6c757d;
+}
+
+.btn-third{
+  background-color: #dc3545;
+}
+
+
 /* PC */
 .app-show-container {
   width: 100%;
