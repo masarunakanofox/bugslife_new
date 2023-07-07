@@ -60,6 +60,14 @@ a.btn-link {
   background-color: #dc3545;
 }
 
+.btn-default{
+  color: black;
+}
+
+.form-control-lg {
+  height: auto;
+  width: 100%;
+}
 
 /* PC */
 .app-show-container {
