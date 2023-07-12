@@ -113,8 +113,8 @@ public class CampaignService {
 	 */
 	@Transactional(readOnly = false, rollbackFor = RuntimeException.class)
 	public void bulkStatusUpdate(List<Long> idList, CampaignStatus nexStatus) throws Exception {
-		try {
-			idList.forEach(id -> {
+		idList.forEach(id -> {
+			try {
 				Campaign campaign = campaignRepository.findById(id).get();
 				// 更新前後のステータスが同じ場合はエラー
 				if (nexStatus.getId() == campaign.getStatus().getId()) {
@@ -122,10 +122,12 @@ public class CampaignService {
 				}
 				campaign.setStatus(nexStatus);
 				campaignRepository.save(campaign);
-			});
-		} catch (RuntimeException e) {
-			throw new Exception(e.getMessage());
-		}
+
+			} catch (RuntimeException e) {
+				throw new Exception(e.getMessage());
+
+			}
+		});
 	}
 
 }
