@@ -57,10 +57,13 @@ public class UnusedCampaignCodeValidator implements ConstraintValidator<UnusedCa
 		if (campaign == null) {
 			return true;
 		}
-		context.disableDefaultConstraintViolation();
-		context.buildConstraintViolationWithTemplate(message).addPropertyNode(fields[1])
-				.addConstraintViolation();
-
-		return false;
+		if (id != null && id.equals(campaign.getId())) {
+			return true;
+		} else {
+			context.disableDefaultConstraintViolation();
+			context.buildConstraintViolationWithTemplate(message).addPropertyNode(fields[1])
+					.addConstraintViolation();
+			return false;
+		}
 	}
 }

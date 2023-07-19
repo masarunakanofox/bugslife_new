@@ -42,7 +42,7 @@
       <div class="form-group">
         <label for="discountType">DiscountType</label>
         <select id="discountType" name="discountType" th:field="*{discountType}" class="form-select">
-          <option 
+          <option
             th:each="type : ${typeList}"
             th:value="${type}"
             th:selected="${discountType == type.id}"
