@@ -28,6 +28,10 @@ public class ShopService {
 		return shopRepository.findById(id);
 	}
 
+	public List<Shop> findByNameContaining(String name) {
+		return shopRepository.findByNameContaining(name);
+	}
+
 	@Transactional(readOnly = false)
 	public Shop save(Shop entity) {
 		return shopRepository.save(entity);
