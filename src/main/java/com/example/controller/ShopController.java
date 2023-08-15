@@ -34,7 +34,7 @@ public class ShopController {
 	public String index(Model model, @RequestParam(name = "name", required = false) Optional<String> name) {
 		List<Shop> shops;
 		if (name.isPresent()) {
-			shops = shopService.findByNameContaining(name.get());
+			shops = shopService.findByCaseInsensitiveNameContaining(name.get());
 		} else {
 			shops = shopService.findAll();
 		}
@@ -100,7 +100,6 @@ public class ShopController {
 			model.addAttribute("shop", entity);
 			return "shop/form";
 		}
-
 		Shop shop = null;
 		try {
 			shop = shopService.save(entity);

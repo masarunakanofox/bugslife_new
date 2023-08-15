@@ -28,8 +28,8 @@ public class ShopService {
 		return shopRepository.findById(id);
 	}
 
-	public List<Shop> findByNameContaining(String name) {
-		return shopRepository.findByNameContaining(name);
+	public List<Shop> findByCaseInsensitiveNameContaining(String name) {
+		return shopRepository.findByCaseInsensitiveNameContaining(name);
 	}
 
 	@Transactional(readOnly = false)
