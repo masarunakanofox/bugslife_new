@@ -2,6 +2,7 @@ package com.example.controller;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Arrays;
 
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,6 @@ public class ShopProductController {
 	@Autowired
 	private CategoryService categoryService;
 
-
 	@GetMapping
 	public String index(Model model, @PathVariable("shopId") Long shopId, @ModelAttribute ProductSearchForm request) {
 		List<ProductWithCategoryName> all = productService.search(shopId, request);
@@ -47,6 +47,12 @@ public class ShopProductController {
 		model.addAttribute("categories", categories);
 		model.addAttribute("request", request);
 		model.addAttribute("shopId", shopId);
+		// 修正点: カテゴリー名リストをセット
+		if (request.getCategoryNames() != null) {
+			String joinedCategoryNames = String.join(",", request.getCategoryNames());
+			List<String> categoryNamesList = Arrays.asList(joinedCategoryNames.split(","));
+			model.addAttribute("categoryNamesList", categoryNamesList);
+		}
 		return "shop_product/index";
 	}
 
@@ -73,7 +79,8 @@ public class ShopProductController {
 	}
 
 	@PostMapping
-	public String create(Model model, @PathVariable("shopId") Long shopId, @Validated @ModelAttribute ProductForm productForm,
+	public String create(Model model, @PathVariable("shopId") Long shopId,
+			@Validated @ModelAttribute ProductForm productForm,
 			BindingResult result, RedirectAttributes redirectAttributes) {
 		// バリデーションチェック
 		if (result.hasErrors()) {
@@ -113,8 +120,9 @@ public class ShopProductController {
 	}
 
 	@PutMapping
-	public String update(Model model, @PathVariable("shopId") Long shopId, @Validated @ModelAttribute ProductForm productForm,
-			BindingResult result,RedirectAttributes redirectAttributes) {
+	public String update(Model model, @PathVariable("shopId") Long shopId,
+			@Validated @ModelAttribute ProductForm productForm,
+			BindingResult result, RedirectAttributes redirectAttributes) {
 		System.out.append(Message.MSG_ERROR, 0, 0);
 		// バリデーションチェック
 		if (result.hasErrors()) {
