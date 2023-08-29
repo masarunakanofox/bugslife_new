@@ -65,7 +65,7 @@ public class ProductService {
 		final Root<Product> root = query.from(Product.class);
 
 		Join<Product, CategoryProduct> categoryProductJoin = root.joinList("categoryProducts", JoinType.LEFT);
-		Join<CategoryProduct, Category> categoryJoin = categoryProductJoin.join("category");
+		Join<CategoryProduct, Category> categoryJoin = categoryProductJoin.join("category", JoinType.LEFT);
 
 		query.multiselect(
 				root.get("id"),

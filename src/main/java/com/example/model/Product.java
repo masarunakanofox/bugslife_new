@@ -64,7 +64,7 @@ public class Product extends TimeEntity implements Serializable {
 		this.setCode(form.getCode());
 		this.setWeight(form.getWeight());
 		this.setHeight(form.getHeight());
-		this.setPrice(form.getPrice());
+		this.set(form.getPrice());
 		this.setTaxType(form.getTaxType());
 	}
 
