@@ -28,6 +28,8 @@ import com.example.model.Category;
 import com.example.model.Product;
 import com.example.service.CategoryService;
 import com.example.service.ProductService;
+import java.util.ArrayList;
+import java.util.Collections;
 
 @Controller
 @RequestMapping("/shops/{shopId}/products")
