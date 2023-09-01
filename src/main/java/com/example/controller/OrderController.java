@@ -61,6 +61,11 @@ public class OrderController {
 		return "order/create";
 	}
 
+	@GetMapping(value = "/shipping")
+	public String shipping() {
+		return "order/shipping";
+	}
+
 	@PostMapping
 	public String create(@Validated @ModelAttribute OrderForm.Create entity, BindingResult result,
 			RedirectAttributes redirectAttributes) {
